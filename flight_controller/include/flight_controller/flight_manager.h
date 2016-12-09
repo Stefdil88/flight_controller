@@ -17,8 +17,8 @@ class FlightManager {
     FlightManager();
     virtual ~FlightManager() {}
 
-    //bool initialize();
-    void initialize();
+    bool initialize();
+    //void initialize();
     void spin(double hz = 20.);
     void emergencyLand(double current_height);
 

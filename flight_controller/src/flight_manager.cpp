@@ -28,7 +28,7 @@ FlightManager::FlightManager() : flight_mode_(IDLE) {
 //Initialization as a normal function////
 ///////////////////////////////////////////////////
 
-void FlightManager::initialize() {
+/*void FlightManager::initialize() {
   // Changing flight modality to GUIDED
   ROS_INFO_STREAM("Trying to call service [/mavros/set_mode]");
   mavros_msgs::SetMode srv_mode;
@@ -65,12 +65,12 @@ void FlightManager::initialize() {
       flight_mode_ = IDLE;
     }
   }
-}
+}*/
 
 ///////////////////////////////////////////////////////
 //Initialization as bool function////
 //////////////////////////////////////////////////////
-/*bool FlightManager::initialize() {
+bool FlightManager::initialize() {
   // Changing flight modality to GUIDED
   ROS_INFO_STREAM("Trying to call service [/mavros/set_mode]");
   mavros_msgs::SetMode srv_mode;
@@ -111,7 +111,7 @@ void FlightManager::initialize() {
     }
   }
   return true;
-}*/
+}
 
 void FlightManager::spin(double hz) {
   for (ros::Rate lr(hz); ros::ok(); lr.sleep()) {
@@ -128,6 +128,7 @@ void FlightManager::spin(double hz) {
     //ROS_INFO_STREAM(__PRETTY_FUNCTION__ << ": spin!");
   }
   //emergencyLand(fcu_.shutdown());
+  //ROS_INFO_STREAM(__PRETTY_FUNCTION__ << ": spin!");
 }
 
 void FlightManager::emergencyLand(double current_height) {
@@ -142,8 +143,9 @@ void FlightManager::emergencyLand(double current_height) {
 }
 
 bool FlightManager::flyServiceCallback(FlyToGoal::Request& req, FlyToGoal::Response& res) {
+//  ROS_INFO("ciao ciao %f",req.goal.position.z);
   if (fcu_.ok() && !fcu_.inExecution()) {
-    ROS_INFO("ciao ciao %f",req.goal.position.z);
+    //ROS_INFO("ciao ciao %f",req.goal.position.z);
     fcu_.setGoal(req.goal);
     return fcu_.execute();
   }

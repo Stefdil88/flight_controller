@@ -37,6 +37,7 @@ bool FlightControlUnit::execute() {
   if (!goal_)
     return false;
   // Start flying...
+  ROS_INFO("ciao");
   execution_ = true;
   const double timeout_sec = 1000.;
   const double poll_rate = 20.;
@@ -55,13 +56,13 @@ bool FlightControlUnit::execute() {
 bool FlightControlUnit::isGoalReached() const {
     const double dx = point_.point.x - goal_->position.x;
     const double dy = point_.point.y - goal_->position.y;
-    return std::hypot(dx, dy) < 0.1;
+    return std::hypot(dx, dy) < 1;
 }
 
 void FlightControlUnit::poseCallback(
   const geometry_msgs::PointStamped::ConstPtr& point) {
   point_ = *point;
-  //ROS_INFO("I heard: [%f],[%f],[%f]", point_.point.x, point_.point.y, point_.point.z);
+  ROS_INFO("I heard: [%f],[%f],[%f]", point_.point.x, point_.point.y, point_.point.z);
   if (execution_) {
     mavros_msgs::OverrideRCIn cmd;
     controller_.computeCommand(*goal_, point, &cmd);
