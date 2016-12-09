@@ -12,7 +12,7 @@ ros::ServiceClient fly_cl_=nh.serviceClient<flight_controller::FlyToGoal>("/fly_
 
 flight_controller::FlyToGoal ftg;
 
-ftg.request.goal.position.x=0;
+ftg.request.goal.position.x=1;
 ftg.request.goal.position.y=0;
 ftg.request.goal.position.z=3;
 ftg.request.goal.orientation.x=0;
@@ -22,7 +22,7 @@ ftg.request.goal.orientation.w=1;
 
 if (fly_cl_.call(ftg))
   {
-    ROS_INFO("working...[%f]", ftg.request.goal.position.z);
+    ROS_INFO("Call executed ...[%f]", ftg.request.goal.position.x);
   }
   else
   {

@@ -21,6 +21,7 @@ class PositionController {
 
   private:
     double kP, kD;
+    double Roll, Pitch;
 };
 
 }

@@ -1,5 +1,11 @@
 #include "flight_controller/position_controller.h"
 
+#define MINRC 1100
+#define BASERC 1500
+#define MAXRC 1900
+
+#define FACTOR  0.6
+
 namespace flight_controller {
 
 void PositionController::computeCommand(const geometry_msgs::Pose& reference,
@@ -8,9 +14,22 @@ void PositionController::computeCommand(const geometry_msgs::Pose& reference,
   const double err_x = reference.position.x - point->point.x;
   const double err_y = reference.position.y - point->point.y;
   const double err_z = reference.position.z - point->point.z;
-  cmd->channels[0] = kP * err_x;
-  cmd->channels[1] = kP * err_y;
-  cmd->channels[2] = 0;
+
+  Roll = BASERC - err_x * FACTOR;
+  Pitch = BASERC - err_y * FACTOR;
+
+  // Limit the Pitch
+  if (Pitch > MAXRC)
+  {
+      Pitch = MAXRC;
+  } else if (Pitch < MINRC)
+  {
+      Pitch = MINRC;
+  }
+  ROS_INFO("ciao");
+  cmd->channels[0] = Roll;
+  cmd->channels[1] = Pitch;
+  cmd->channels[2] = BASERC;
   cmd->channels[3] = 0;
   cmd->channels[4] = 0;
   cmd->channels[5] = 0;
