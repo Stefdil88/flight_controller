@@ -75,9 +75,9 @@ bool FlightManager::initialize() {
   //ROS_INFO_STREAM("Trying to call service [/mavros/set_mode]");
   mavros_msgs::SetMode srv_mode;
   srv_mode.request.base_mode = 0;
-  srv_mode.request.custom_mode = "LOITER";
+  srv_mode.request.custom_mode = "GUIDED";
   if(ros::service::call("/mavros/set_mode", srv_mode)) {
-    ROS_INFO_STREAM("Mode changed in LOITER");
+    ROS_INFO_STREAM("Mode changed in GUIDED");
     flight_mode_ = GUIDED;
   } else {
     ROS_ERROR("Could not call service [/mavros/set_mode]. Shutting down.");

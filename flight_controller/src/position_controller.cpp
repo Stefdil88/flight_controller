@@ -4,7 +4,7 @@
 #define BASERC 1500
 #define MAXRC 1900
 
-#define FACTOR  0.6
+#define FACTOR  60
 
 namespace flight_controller {
 
@@ -15,6 +15,7 @@ void PositionController::computeCommand(const geometry_msgs::Pose& reference,
   const double err_y = reference.position.y - point->point.y;
   const double err_z = reference.position.z - point->point.z;
 
+  //ROS_INFO("ciao [%f], [%f]:", err_x, err_y);
   Roll = BASERC - err_x * FACTOR;
   Pitch = BASERC - err_y * FACTOR;
 
@@ -26,7 +27,7 @@ void PositionController::computeCommand(const geometry_msgs::Pose& reference,
   {
       Pitch = MINRC;
   }
-  ROS_INFO("ciao");
+  //ROS_INFO("ciao [%f], [%f}]: ", Roll, Pitch);
   cmd->channels[0] = Roll;
   cmd->channels[1] = Pitch;
   cmd->channels[2] = BASERC;

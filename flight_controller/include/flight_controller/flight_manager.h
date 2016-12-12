@@ -32,8 +32,8 @@ class FlightManager {
   private:
     // Fly service
     ros::ServiceServer fly_srv_;
-    //ros::ServiceClient fly_cl_;
-    //flight_controller::FlyToGoal ftg;
+    //mavros_msgs::SetMode srv_mode;
+
 
     // The flight control unit.
     // Flight modality

@@ -7,7 +7,7 @@ namespace flight_controller {
 FlightControlUnit::FlightControlUnit() : goal_(nullptr), execution_(false) {
   ros::NodeHandle nh;
   pose_sub_ = nh.subscribe("/erlecopter/ground_truth/position", 1, &FlightControlUnit::poseCallback, this);
-  cmd_pub_ = nh.advertise<mavros_msgs::OverrideRCIn>("/cmd", 1);
+  cmd_pub_ = nh.advertise<mavros_msgs::OverrideRCIn>("/mavros/rc/override", 1000);
 }
 
 bool FlightControlUnit::ok() const {
@@ -38,10 +38,15 @@ bool FlightControlUnit::execute() {
     return false;
   // Start flying...
   execution_ = true;
-  const double timeout_sec = 10.;
+  const double timeout_sec = 60.;
   const double poll_rate = 20.;
   for (int i = 0; i < poll_rate * timeout_sec; ++i) {
+
+    if (ros::ok())
+      ros::spinOnce();
     //ROS_INFO_STREAM(__PRETTY_FUNCTION__ << ": spin!");
+    //ROS_INFO("ciao [%s]; ",execution_);
+    //std::cout<<execution_;
     if (isGoalReached()) {
       execution_ = false;
       ROS_INFO("goal reached");
@@ -53,16 +58,17 @@ bool FlightControlUnit::execute() {
   if (!isGoalReached()){
      ROS_INFO("goal not reached: shutting down...");
      shutdown();
+     execution_=false;
      return true;
   }
-  execution_ = false;
-  return false;
+  //execution_ = false;
+  //return false;
 }
 
 bool FlightControlUnit::isGoalReached() const {
     const double dx = goal_->position.x - point_.point.x;
     const double dy = goal_->position.y - point_.point.y;
-    ROS_INFO("error_dx_dy = (%f, %f)", dx, dy);
+    //ROS_INFO("error_dx_dy = (%f, %f)", dx, dy);
     return std::hypot(dx, dy) < 0.1;
 }
 
@@ -70,9 +76,12 @@ void FlightControlUnit::poseCallback(
   const geometry_msgs::PointStamped::ConstPtr& point) {
   point_ = *point;
   //ROS_INFO("I heard: [%f],[%f],[%f]", point_.point.x, point_.point.y, point_.point.z);
+  //ROS_INFO_STREAM(__PRETTY_FUNCTION__ << ": spin!");
   if (execution_) {
+    //ROS_INFO("I heard: [%f],[%f],[%f]", point_.point.x, point_.point.y, point_.point.z);
     mavros_msgs::OverrideRCIn cmd;
     controller_.computeCommand(*goal_, point, &cmd);
+    ROS_INFO("I heard: [%d],[%d]", cmd.channels[0], cmd.channels[1]);
     cmd_pub_.publish(cmd);
   } else {
     goal_.reset(nullptr);

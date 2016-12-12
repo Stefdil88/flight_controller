@@ -6,8 +6,8 @@ int main(int argc, char **argv) {
   ros::init(argc, argv, "flight_manager");
 
   flight_controller::FlightManager flight_manager;
-  for (ros::Rate lr(1.); !flight_manager.initialize(); lr.sleep())
-    ROS_WARN_STREAM("Trying to initialize the flight manager.");
+  //for (ros::Rate lr(1.); !flight_manager.initialize(); lr.sleep())
+    //ROS_WARN_STREAM("Trying to initialize the flight manager.");
 
   /*if (atoll(argv[1])==1){
     ROS_INFO("Initialization");
