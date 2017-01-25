@@ -6,12 +6,9 @@
 #include <ros/ros.h>
 
 #include "flight_controller/flight_control_unit.h"
-<<<<<<< HEAD
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/CommandBool.h>
 #include <mavros_msgs/CommandTOL.h>
-=======
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
 
 namespace flight_controller {
 
@@ -38,14 +35,9 @@ class FlightManager {
   private:
     // Fly service
     ros::ServiceServer fly_srv_;
-<<<<<<< HEAD
     mavros_msgs::SetMode srv_mode;
     mavros_msgs::CommandBool srv_command;
     mavros_msgs::CommandTOL srv_takeoff, srv_land;
-=======
-    //mavros_msgs::SetMode srv_mode;
-
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
 
     // The flight control unit.
     // Flight modality

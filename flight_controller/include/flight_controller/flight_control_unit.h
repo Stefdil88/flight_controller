@@ -25,6 +25,7 @@ class FlightControlUnit {
   public:
     double min_x, min_y, min_z;
     double max_x, max_y, max_z;
+    //ros::Time lastTime;
 
   private:
     void poseCallback(const geometry_msgs::PointStamped::ConstPtr& point);

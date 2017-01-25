@@ -14,10 +14,7 @@ bool FlightControlUnit::ok() const {
   const double x = point_.point.x;
   const double y = point_.point.y;
   const double z = point_.point.z;
-<<<<<<< HEAD
   //ROS_INFO("Position (%f, %f, %f)", x, y, z);
-=======
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
   const bool good_x = x >= min_x && x <= max_x;
   const bool good_y = y >= min_y && y <= max_y;
   const bool good_z = z >= min_z && z <= max_z;
@@ -42,17 +39,12 @@ bool FlightControlUnit::execute() {
     return false;
   // Start flying...
   execution_ = true;
-<<<<<<< HEAD
-  const double timeout_sec = 10.;
-=======
-  const double timeout_sec = 60.;
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
+  const double timeout_sec = 30.;
   const double poll_rate = 20.;
   for (int i = 0; i < poll_rate * timeout_sec; ++i) {
 
     if (ros::ok())
       ros::spinOnce();
-<<<<<<< HEAD
     //ROS_INFO("ciao [%i]; ",execution_);
     //std::cout<<execution_;
     //ROS_INFO("extrema: %d", ok());
@@ -66,19 +58,6 @@ bool FlightControlUnit::execute() {
       }
       else {ROS_INFO("VAFFANCULO");} //ATTENZIONE: atterraggio di emergenza da implementare
     }
-=======
-    //ROS_INFO_STREAM(__PRETTY_FUNCTION__ << ": spin!");
-    //ROS_INFO("ciao [%s]; ",execution_);
-    //std::cout<<execution_;
-    if (isGoalReached()) {
-      execution_ = false;
-      ROS_INFO("goal reached");
-      return true;
-    }
-    ros::Rate(poll_rate).sleep();
-  }
-
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
   if (!isGoalReached()){
      ROS_INFO("goal not reached: shutting down...");
      shutdown();
@@ -104,15 +83,15 @@ void FlightControlUnit::poseCallback(
   if (execution_) {
     //ROS_INFO("I heard: [%f],[%f],[%f]", point_.point.x, point_.point.y, point_.point.z);
     mavros_msgs::OverrideRCIn cmd;
+    //lastTime = ros::Time::now();
+    if (!controller_.isActive())
+      controller_.activate(ros::Time::now());
     controller_.computeCommand(*goal_, point, &cmd);
-<<<<<<< HEAD
     //ROS_INFO("I heard: [%d],[%d]", cmd.channels[0], cmd.channels[1]);
-=======
-    ROS_INFO("I heard: [%d],[%d]", cmd.channels[0], cmd.channels[1]);
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
     cmd_pub_.publish(cmd);
   } else {
     goal_.reset(nullptr);
+    controller_.deactivate();
   }
 }
 

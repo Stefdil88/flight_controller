@@ -8,30 +8,27 @@
 #include <geometry_msgs/PointStamped.h>
 #include <mavros_msgs/OverrideRCIn.h>
 
+#include <memory>
+
 namespace flight_controller {
 
 class PositionController {
   public:
-<<<<<<< HEAD
     PositionController();
-=======
-    PositionController() {}
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
     virtual ~PositionController() {}
+
+    void activate(const ros::Time& stamp) { lastTime.reset(new ros::Time(stamp));}
+    void deactivate() { lastTime.reset(nullptr); }
+    bool isActive() const { return lastTime != nullptr; }
 
     void computeCommand(const geometry_msgs::Pose& reference,
                         const geometry_msgs::PointStamped::ConstPtr& point,
                         mavros_msgs::OverrideRCIn* cmd);
 
   private:
-<<<<<<< HEAD
-
-    ros::Time lastTime; //Time control
-    double pre_err_x, pre_err_y;
-    double kP=45, kD=40;
-=======
-    double kP, kD;
->>>>>>> 8aa5560095dfc3c8308c1a2e0c4aee27e4906efb
+    std::unique_ptr<ros::Time> lastTime;
+    double pre_err_x, pre_err_y, integral_x, integral_y;
+    double kP_x=50, kD_x=60, kI_x=10, kP_y=50, kD_y=60, kI_y=10;
     double Roll, Pitch;
 };
 
