@@ -56,11 +56,12 @@ bool FlightControlUnit::execute() {
         }
         ros::Rate(poll_rate).sleep();
       }
-      else {ROS_INFO("VAFFANCULO");} //ATTENZIONE: atterraggio di emergenza da implementare
+      else {//ROS_INFO("VAFFANCULO");
+            shutdown();} //ATTENZIONE: atterraggio di emergenza da implementare
     }
   if (!isGoalReached()){
      ROS_INFO("goal not reached: shutting down...");
-     shutdown();
+     //shutdown();
      execution_=false;
      return true;
   }

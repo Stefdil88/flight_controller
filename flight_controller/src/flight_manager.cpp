@@ -13,11 +13,11 @@ FlightManager::FlightManager() : flight_mode_(IDLE) {
   // Parameters.
   ros::NodeHandle pnh("~");
   pnh.param<double>("flight_height", height_, 3.);
-  pnh.param<double>("safety_min_x", fcu_.min_x, -4.);
-  pnh.param<double>("safety_min_y", fcu_.min_y, -4.);
+  pnh.param<double>("safety_min_x", fcu_.min_x, -3.);
+  pnh.param<double>("safety_min_y", fcu_.min_y, -3.);
   pnh.param<double>("safety_min_z", fcu_.min_z, 0.);
-  pnh.param<double>("safety_max_x", fcu_.max_x, 4.);
-  pnh.param<double>("safety_max_y", fcu_.max_y, 4.);
+  pnh.param<double>("safety_max_x", fcu_.max_x, 3.);
+  pnh.param<double>("safety_max_y", fcu_.max_y, 3.);
   pnh.param<double>("safety_max_z", fcu_.max_z, 5.);
 }
 
@@ -122,8 +122,10 @@ void FlightManager::spin(double hz) {
     try {
       ros::spinOnce();
       //ROS_INFO("extrema: %d", fcu_.ok());
-      if (!fcu_.ok())
+      if (!fcu_.ok()){
         emergencyLand(fcu_.shutdown());
+        ROS_WARN_STREAM("Emergency landing! Retrying...");
+       ros::shutdown();}
     } catch (const std::runtime_error& err) {
       // Got a runtime error, force landing.
       ROS_ERROR_STREAM("Got an errror. Landing. " << err.what());
@@ -159,6 +161,7 @@ bool FlightManager::flyServiceCallback(FlyToGoal::Request& req, FlyToGoal::Respo
     }
     fcu_.setGoal(req.goal);
     return fcu_.execute();
+
   }
   return false;
 }

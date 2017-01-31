@@ -21,7 +21,7 @@ class FlightControlUnit {
     double shutdown();
     void setGoal(const geometry_msgs::Pose& goal);
     bool execute();
-
+    
   public:
     double min_x, min_y, min_z;
     double max_x, max_y, max_z;

@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(flight_controller)
 
+## Set release mode.
+set(ROS_BUILD_TYPE Release)
+
 ## Enable C++11 support
 include(CheckCXXCompilerFlag)
 check_cxx_compiler_flag("-std=c++11" COMPILER_SUPPORTS_CXX11)

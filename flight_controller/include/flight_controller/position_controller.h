@@ -28,8 +28,9 @@ class PositionController {
   private:
     std::unique_ptr<ros::Time> lastTime;
     double pre_err_x, pre_err_y, integral_x, integral_y;
-    double kP_x=50, kD_x=60, kI_x=10, kP_y=50, kD_y=60, kI_y=10;
-    double Roll, Pitch;
+    //double kP_x=50, kD_x=60, kI_x=10, kP_y=50, kD_y=60, kI_y=10;
+    double kP_x=60, kD_x=70, kI_x=8, kP_y=60, kD_y=70, kI_y=8, kP_z=1, kD_z=1, kI_z=1;
+    double Roll, Pitch, Throttle;
 };
 
 }

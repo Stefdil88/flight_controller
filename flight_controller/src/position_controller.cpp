@@ -41,6 +41,7 @@ void PositionController::computeCommand(const geometry_msgs::Pose& reference,
   //Total output
   Roll = BASERC + (err_x * kP_x + kD_x*derivative_x + kI_x*integral_x);
   Pitch = BASERC + (err_y * kP_y + kD_y*derivative_y + kI_y*integral_y);
+  Throttle =BASERC;
 
   // Limiting Pitch and Roll
   if (Roll > MAXRC)
@@ -62,8 +63,9 @@ void PositionController::computeCommand(const geometry_msgs::Pose& reference,
   pre_err_x = err_x;
   pre_err_y = err_y;
 
-  ROS_INFO("roll and pitch (%f, %f):", Roll, Pitch);
-  ROS_INFO("errore x, y, z (%f, %f, %f):", err_x, err_y, err_z);
+  //ROS_INFO("roll and pitch (%f, %f):", Roll, Pitch);
+  //ROS_INFO("errore x, y, z (%f, %f, %f):", err_x, err_y, err_z);
+  //ROS_INFO("position (%f, %f):", point->point.x, point->point.y);
   cmd->channels[0] = Pitch;//Roll;
   cmd->channels[1] = Roll;//Pitch;
   cmd->channels[2] = BASERC;
